@@ -62,10 +62,14 @@ MIDDLEWARE = [
 
 # WhiteNoise: comprime y versiona
 STORAGES = {
+    "default": {  # <- faltaba
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    }
+    },
 }
+
 
 ROOT_URLCONF = 'proyecto.urls'
 
