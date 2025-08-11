@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Historial – Metodologías{% endblock %}
+{% block content %}
+<h1 class="h4 fw-bold">Historial de Metodologías de Digitalización</h1>
+
+<form class="row g-2 mb-3" method="get">
+  <div class="col-md-4">
+    <select class="form-select" name="tipo">
+      <option value="">Tipo (todos)</option>
+      {% if tipos %}
+        {% for v,l in tipos %}
+          <option value="{{ v }}" {% if request.GET.tipo == v %}selected{% endif %}>{{ l }}</option>
+        {% endfor %}
+      {% endif %}
+    </select>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-dark btn-sm">Filtrar</button>
+  </div>
+</form>
+
+<div class="table-responsive">
+<table class="table table-striped align-middle">
+  <thead class="table-dark">
+    <tr><th>Tipo</th><th>DPI</th><th>Responsable</th><th>Fecha meta</th><th>Lineamientos</th><th>Creado</th></tr>
+  </thead>
+  <tbody>
+    {% for m in page.object_list %}
+      <tr>
+        <td>{{ m.tipo_documento }}</td>
+        <td>{{ m.resolucion_dpi }}</td>
+        <td>{{ m.responsable }}</td>
+        <td>{{ m.fecha_meta }}</td>
+        <td class="small">{{ m.lineamientos|default:'—' }}</td>
+        <td class="text-muted small">{{ m.created_at|date:'Y-m-d H:i' }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="6" class="text-center text-muted">Sin registros</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+{% include '_pager.html' with page=page %}
+{% endblock %}

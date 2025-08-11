@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Dos SGC – Homologación{% endblock %}
+{% block content %}
+<h1 class="h4 fw-bold">{{ meta.titulo }}</h1>
+<p class="text-muted">{{ meta.justificacion }}</p>
+<div class="card">
+  <div class="card-header fw-semibold">Registrar propuesta de homologación</div>
+  <div class="card-body">
+    <form method="post" enctype="multipart/form-data" class="row g-3" novalidate>
+      {% csrf_token %}
+      <div class="col-md-6"><label class="form-label">Normas involucradas</label>
+        <select name="normas_involucradas" class="form-select" multiple>
+          {% for n in normas %}<option value="{{ n.id }}">{{ n }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6"><label class="form-label">Proceso</label>
+        <select name="proceso" class="form-select"><option value="">—</option>{% for p in procesos %}<option value="{{ p.id }}">{{ p.nombre }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-md-6"><label class="form-label">Documento equivalente</label><input name="documento_equivalente" class="form-control" required></div>
+      <div class="col-md-6"><label class="form-label">Responsable</label>
+        <select name="responsable" class="form-select">{% for e in empleados %}<option value="{{ e.id }}">{{ e.nombre }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-12"><label class="form-label">Propuesta</label><textarea name="propuesta" class="form-control" rows="4" required></textarea></div>
+      <div class="col-md-6"><label class="form-label">Adjunto</label><input type="file" name="adjunto" class="form-control"></div>
+      <div class="col-12"><button class="btn btn-warning">Guardar propuesta</button></div>
+    </form>
+  </div>
+</div>
+{% endblock %}

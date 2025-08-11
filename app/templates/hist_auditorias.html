@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Historial – Auditorías{% endblock %}
+{% block content %}
+<h1 class="h4 fw-bold">Historial de Auditorías</h1>
+
+<form class="row g-2 mb-3" method="get">
+  <div class="col-md-6">
+    <input class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Buscar por proceso/auditor/equipo">
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="norma">
+      <option value="">Norma (todas)</option>
+      {% if normas %}
+        {% for n in normas %}
+          <option value="{{ n.id }}" {% if request.GET.norma == n.id|stringformat:'s' %}selected{% endif %}>{{ n }}</option>
+        {% endfor %}
+      {% endif %}
+    </select>
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="proveedor">
+      <option value="">Proveedor?</option>
+      <option value="1" {% if request.GET.proveedor == '1' %}selected{% endif %}>Sí</option>
+      <option value="0" {% if request.GET.proveedor == '0' %}selected{% endif %}>No</option>
+    </select>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-dark btn-sm">Filtrar</button>
+  </div>
+</form>
+
+<div class="table-responsive">
+<table class="table table-striped align-middle">
+  <thead class="table-dark">
+    <tr><th>Fecha</th><th>Proceso</th><th>Auditor líder</th><th>Proveedor</th><th>Normas</th><th>Equipo</th></tr>
+  </thead>
+  <tbody>
+    {% for a in page.object_list %}
+      <tr>
+        <td>{{ a.fecha }}</td>
+        <td>{{ a.proceso|default:a.proceso_texto }}</td>
+        <td>{{ a.auditor_lider }}</td>
+        <td>{% if a.es_proveedor %}<span class="badge bg-warning text-dark">Sí</span>{% else %}<span class="text-muted">No</span>{% endif %}</td>
+        <td class="small">
+          {% for n in a.normas_a_auditar.all %}
+            <span class="badge bg-secondary me-1">{{ n.codigo }}</span>
+          {% empty %}<span class="text-muted">—</span>{% endfor %}
+        </td>
+        <td class="small">{{ a.equipo|default:'—' }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="6" class="text-center text-muted">Sin registros</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+{% include '_pager.html' with page=page %}
+{% endblock %}

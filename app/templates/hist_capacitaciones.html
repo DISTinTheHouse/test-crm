@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Historial – Capacitaciones{% endblock %}
+{% block content %}
+<h1 class="h4 fw-bold">Historial de Capacitaciones</h1>
+
+<form class="row g-2 mb-3" method="get">
+  <div class="col-md-6">
+    <input class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Buscar por tema/programa/responsable">
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="modalidad">
+      <option value="">Modalidad (todas)</option>
+      {% if modalidades %}
+        {% for v,l in modalidades %}
+          <option value="{{ v }}" {% if request.GET.modalidad == v %}selected{% endif %}>{{ l }}</option>
+        {% endfor %}
+      {% endif %}
+    </select>
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="norma">
+      <option value="">Norma (todas)</option>
+      {% if normas %}
+        {% for n in normas %}
+          <option value="{{ n.id }}" {% if request.GET.norma == n.id|stringformat:'s' %}selected{% endif %}>{{ n }}</option>
+        {% endfor %}
+      {% endif %}
+    </select>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-dark btn-sm">Filtrar</button>
+  </div>
+</form>
+
+<div class="table-responsive">
+<table class="table table-striped align-middle">
+  <thead class="table-dark">
+    <tr><th>Tema</th><th>Modalidad</th><th>Fechas</th><th>Responsable</th><th>Normas</th><th>Participantes</th><th>Creado</th></tr>
+  </thead>
+  <tbody>
+    {% for c in page.object_list %}
+      <tr>
+        <td>{{ c.tema }}</td>
+        <td>{{ c.modalidad }}</td>
+        <td>{{ c.fecha_inicio }} → {{ c.fecha_fin }}</td>
+        <td>{{ c.responsable }}</td>
+        <td class="small">
+          {% for n in c.normas.all %}
+            <span class="badge bg-secondary me-1">{{ n.codigo }}</span>
+          {% empty %}<span class="text-muted">—</span>{% endfor %}
+        </td>
+        <td>{{ c.participantes_estimados }}</td>
+        <td class="text-muted small">{{ c.created_at|date:'Y-m-d H:i' }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="7" class="text-center text-muted">Sin registros</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+{% include '_pager.html' with page=page %}
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}SGC – Gestión documental{% endblock %}
+{% block content %}
+<h1 class="h4 fw-bold">{{ meta.titulo }}</h1>
+<p class="text-muted">{{ meta.justificacion }}</p>
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card h-100">
+      <div class="card-header fw-semibold">Alta / actualización de documento</div>
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data" class="row g-3" novalidate>
+          {% csrf_token %}
+          <div class="col-md-8"><label class="form-label">Título</label><input name="titulo" class="form-control" required></div>
+          <div class="col-md-4"><label class="form-label">Tipo</label>
+            <select name="tipo" class="form-select">
+              {% for v,l in tipos %}<option value="{{ v }}">{{ l }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="col-md-4"><label class="form-label">Código</label><input name="codigo" class="form-control" required></div>
+          <div class="col-md-2"><label class="form-label">Versión</label><input name="version" class="form-control" value="1.0"></div>
+          <div class="col-md-3"><label class="form-label">Estado</label>
+            <select name="estado" class="form-select">
+              {% for v,l in estados %}<option value="{{ v }}">{{ l }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="col-md-3"><label class="form-label">Propietario</label>
+            <select name="propietario" class="form-select">{% for e in empleados %}<option value="{{ e.id }}">{{ e.nombre }}</option>{% endfor %}</select>
+          </div>
+          <div class="col-md-6"><label class="form-label">Revisores</label>
+            <select name="revisores" class="form-select" multiple>{% for e in empleados %}<option value="{{ e.id }}">{{ e.nombre }}</option>{% endfor %}</select>
+          </div>
+          <div class="col-md-6"><label class="form-label">Archivo</label><input type="file" name="archivo" class="form-control"></div>
+          <div class="col-md-3"><label class="form-label">Emisión</label><input type="date" name="fecha_emision" class="form-control" required></div>
+          <div class="col-md-3"><label class="form-label">Vencimiento</label><input type="date" name="fecha_vencimiento" class="form-control"></div>
+          <div class="col-12"><label class="form-label">Comentarios</label><textarea name="comentarios" class="form-control" rows="3"></textarea></div>
+          <div class="col-12"><button class="btn btn-secondary">Guardar documento</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card h-100">
+      <div class="card-header fw-semibold">Flujos sugeridos</div>
+      <div class="card-body">
+        <ul class="small text-muted">
+          <li>Solicitud de revisión → Revisor(es) → Aprobación → Publicación.</li>
+          <li>Control de versiones y vencimientos.</li>
+          <li>Bitácora de cambios y responsables.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

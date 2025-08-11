@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Historial – Documentos SGC{% endblock %}
+{% block content %}
+<h1 class="h4 fw-bold">Historial de Documentos</h1>
+
+<form class="row g-2 mb-3" method="get">
+  <div class="col-md-6">
+    <input class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Buscar por título/código/comentarios">
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="estado">
+      <option value="">Estado (todos)</option>
+      {% if estados %}
+        {% for v,l in estados %}
+          <option value="{{ v }}" {% if request.GET.estado == v %}selected{% endif %}>{{ l }}</option>
+        {% endfor %}
+      {% endif %}
+    </select>
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="tipo">
+      <option value="">Tipo (todos)</option>
+      {% if tipos %}
+        {% for v,l in tipos %}
+          <option value="{{ v }}" {% if request.GET.tipo == v %}selected{% endif %}>{{ l }}</option>
+        {% endfor %}
+      {% endif %}
+    </select>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-dark btn-sm">Filtrar</button>
+  </div>
+</form>
+
+<div class="table-responsive">
+<table class="table table-striped align-middle">
+  <thead class="table-dark">
+    <tr><th>Código</th><th>Título</th><th>Tipo</th><th>Versión</th><th>Estado</th><th>Propietario</th><th>Creado</th></tr>
+  </thead>
+  <tbody>
+    {% for d in page.object_list %}
+      <tr>
+        <td>{{ d.codigo }}</td>
+        <td>{{ d.titulo }}</td>
+        <td>{{ d.tipo }}</td>
+        <td>{{ d.version }}</td>
+        <td>{{ d.estado }}</td>
+        <td>{{ d.propietario }}</td>
+        <td class="text-muted small">{{ d.created_at|date:'Y-m-d H:i' }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="7" class="text-center text-muted">Sin registros</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+{% include '_pager.html' with page=page %}
+{% endblock %}

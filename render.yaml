@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: render-app
+    runtime: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+    startCommand: gunicorn proyecto.wsgi:application

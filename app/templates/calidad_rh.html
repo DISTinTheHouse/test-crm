@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Calidad/RH – Capacitaciones{% endblock %}
+{% block content %}
+<h1 class="h4 fw-bold">{{ meta.titulo }}</h1>
+<p class="text-muted">{{ meta.justificacion }}</p>
+<div class="card">
+  <div class="card-header fw-semibold">Registrar capacitación</div>
+  <div class="card-body">
+    <form method="post" enctype="multipart/form-data" class="row g-3" novalidate>
+      {% csrf_token %}
+      <div class="col-md-8"><label class="form-label">Tema</label><input name="tema" class="form-control" required></div>
+      <div class="col-md-4"><label class="form-label">Programa</label><input name="programa" class="form-control"></div>
+      <div class="col-md-4">
+        <label class="form-label">Modalidad</label>
+        <select name="modalidad" class="form-select" required>
+          <option value="Presencial">Presencial</option>
+          <option value="Virtual">Virtual</option>
+          <option value="Mixta">Mixta</option>
+        </select>
+      </div>
+      <div class="col-md-8">
+        <label class="form-label">Normas</label>
+        <select name="normas" class="form-select" multiple>
+          {% for n in normas %}<option value="{{ n.id }}">{{ n }}</option>{% endfor %}
+        </select>
+        <div class="form-text">Ctrl/Cmd + clic para seleccionar varias</div>
+      </div>
+      <div class="col-md-3"><label class="form-label">Fecha inicio</label><input type="date" name="fecha_inicio" class="form-control" required></div>
+      <div class="col-md-3"><label class="form-label">Fecha fin</label><input type="date" name="fecha_fin" class="form-control" required></div>
+      <div class="col-md-6"><label class="form-label">Responsable</label>
+        <select name="responsable" class="form-select">{% for e in empleados %}<option value="{{ e.id }}">{{ e.nombre }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-md-3"><label class="form-label">Participantes estimados</label><input type="number" name="participantes_estimados" class="form-control" min="1" value="1"></div>
+      <div class="col-md-3"><label class="form-label">Evidencia</label><input type="file" name="evidencia" class="form-control"></div>
+      <div class="col-12"><label class="form-label">Notas</label><textarea name="notas" class="form-control" rows="3"></textarea></div>
+      <div class="col-12"><button class="btn btn-success">Guardar</button></div>
+    </form>
+  </div>
+</div>
+{% endblock %}

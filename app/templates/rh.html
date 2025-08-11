@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}RH – Expedientes{% endblock %}
+{% block content %}
+<h1 class="h4 fw-bold">{{ meta.titulo }}</h1>
+<p class="text-muted">{{ meta.justificacion }}</p>
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-header fw-semibold">Cargar expediente electrónico</div>
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data" class="row g-3" novalidate>
+          {% csrf_token %}
+          <input type="hidden" name="exp-submit" value="1">
+          <div class="col-12"><label class="form-label">Empleado</label>
+            <select name="empleado" class="form-select" required>{% for e in empleados %}<option value="{{ e.id }}">{{ e.nombre }}</option>{% endfor %}</select>
+          </div>
+          <div class="col-md-6"><label class="form-label">CURP</label><input name="curp" class="form-control"></div>
+          <div class="col-md-6"><label class="form-label">NSS</label><input name="nss" class="form-control"></div>
+          <div class="col-md-6"><label class="form-label">Fecha ingreso</label><input type="date" name="fecha_ingreso" class="form-control" required></div>
+          <div class="col-md-6"><label class="form-label">Paquete documentos</label><input type="file" name="paquete_documentos" class="form-control"></div>
+          <div class="col-12"><label class="form-label">Notas</label><textarea name="notas" class="form-control" rows="3"></textarea></div>
+          <div class="col-12"><button class="btn btn-success">Guardar expediente</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-header fw-semibold">Metodología de digitalización</div>
+      <div class="card-body">
+        <form method="post" class="row g-3" novalidate>
+          {% csrf_token %}
+          <input type="hidden" name="dig-submit" value="1">
+          <div class="col-md-6"><label class="form-label">Tipo de documento</label>
+            <select name="tipo_documento" class="form-select">
+              <option>Contrato</option>
+              <option>Expediente</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="col-md-6"><label class="form-label">Resolución (DPI)</label><input type="number" name="resolucion_dpi" class="form-control" value="300" min="72"></div>
+          <div class="col-md-6"><label class="form-label">Responsable</label>
+            <select name="responsable" class="form-select">{% for e in empleados %}<option value="{{ e.id }}">{{ e.nombre }}</option>{% endfor %}</select>
+          </div>
+          <div class="col-md-6"><label class="form-label">Fecha meta</label><input type="date" name="fecha_meta" class="form-control" required></div>
+          <div class="col-12"><label class="form-label">Lineamientos</label><textarea name="lineamientos" class="form-control" rows="3"></textarea></div>
+          <div class="col-12"><button class="btn btn-primary">Guardar metodología</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
