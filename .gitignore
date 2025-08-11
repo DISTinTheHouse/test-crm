@@ -11,4 +11,8 @@ media/
 # OS/IDE
 .DS_Store
 .vscode/
-.idea/
+.idea/db.sqlite3
+
+# VENV
+env/
+env
