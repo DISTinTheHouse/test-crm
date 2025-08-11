@@ -26,7 +26,16 @@ SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = [h for h in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",") if h]
+ALLOWED_HOSTS = [
+    h for h in os.getenv(
+        "ALLOWED_HOSTS",
+        "localhost,127.0.0.1,test-crm-e51x.onrender.com"
+    ).split(",") if h
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{h}" for h in ALLOWED_HOSTS if not h.startswith("localhost") and not h.startswith("127.")
+]
 
 # Application definition
 
